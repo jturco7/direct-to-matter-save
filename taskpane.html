@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct-to-Matter Save</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-navy: #1a2332;
+            --secondary-gold: #d4af37;
+            --accent-crimson: #8b1538;
+            --neutral-cream: #f8f6f2;
+            --neutral-stone: #e8e6e1;
+            --text-charcoal: #2c3e50;
+            --text-muted: #6c757d;
+            --success-green: #22c55e;
+            --error-red: #ef4444;
+            --border-subtle: #e2e8f0;
+            
+            --font-display: 'Crimson Text', serif;
+            --font-body: 'Inter Tight', sans-serif;
+            
+            --shadow-soft: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-medium: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-strong: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+            
+            --border-radius: 8px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, var(--neutral-cream) 0%, var(--neutral-stone) 100%);
+            color: var(--text-charcoal);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            padding: 24px 20px;
+            max-width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary-gold), var(--accent-crimson));
+            border-radius: 2px;
+        }
+        
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary-navy);
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        
+        .status-bar {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .status-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending { 
+            background: #fef3c7; 
+            color: #92400e; 
+        }
+        
+        .status-success { 
+            background: #dcfce7; 
+            color: #16a34a; 
+        }
+        
+        .status-error { 
+            background: #fecaca; 
+            color: #dc2626; 
+        }
+        
+        .status-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .attachment-section {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #2c3e50 100%);
+            color: white;
+            padding: 16px 20px;
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary-gold), var(--accent-crimson));
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .attachment-list {
+            list-style: none;
+        }
+        
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--neutral-stone);
+            transition: var(--transition);
+        }
+        
+        .attachment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .attachment-item:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+        
+        .attachment-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-subtle);
+            border-radius: 4px;
+            margin-right: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .attachment-checkbox:hover {
+            border-color: var(--secondary-gold);
+        }
+        
+        .attachment-checkbox.checked {
+            background: var(--secondary-gold);
+            border-color: var(--secondary-gold);
+        }
+        
+        .attachment-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .attachment-info {
+            flex: 1;
+        }
+        
+        .attachment-name {
+            font-weight: 500;
+            color: var(--text-charcoal);
+            font-size: 14px;
+        }
+        
+        .attachment-size {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .search-section {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        
+        .search-input {
+            width: 100%;
+            border: none;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-family: var(--font-body);
+            background: white;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .search-input:focus {
+            background: rgba(212, 175, 55, 0.02);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .results-list {
+            max-height: 240px;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-subtle);
+        }
+        
+        .result-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--neutral-stone);
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-item:hover {
+            background: rgba(212, 175, 55, 0.08);
+        }
+        
+        .result-item.selected {
+            background: linear-gradient(135deg, var(--secondary-gold) 0%, #e6be3a 100%);
+            color: var(--primary-navy);
+        }
+        
+        .matter-number {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .matter-name {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .folder-selection {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            padding: 20px;
+        }
+        
+        .folder-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .folder-option {
+            padding: 12px 16px;
+            border: 2px solid var(--border-subtle);
+            border-radius: var(--border-radius);
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .folder-option:hover {
+            border-color: var(--secondary-gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        
+        .folder-option.selected {
+            background: var(--secondary-gold);
+            border-color: var(--secondary-gold);
+            color: white;
+        }
+        
+        .custom-folder {
+            margin-top: 12px;
+        }
+        
+        .custom-folder input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-subtle);
+            border-radius: var(--border-radius);
+            font-family: var(--font-body);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .custom-folder input:focus {
+            border-color: var(--secondary-gold);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn:hover:before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #2c3e50 100%);
+            color: white;
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-strong);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--text-charcoal);
+            border: 2px solid var(--border-subtle);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--secondary-gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: var(--neutral-stone);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-gold), var(--accent-crimson));
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading .progress-fill {
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 16px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .folder-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1>Direct-to-Matter Save</h1>
+            <p>Save email attachments directly to SharePoint matter folders</p>
+        </header>
+        
+        <div class="status-bar">
+            <div class="status-content">
+                <span class="status-icon status-pending">⏳</span>
+                <span class="status-text">Loading email attachments...</span>
+            </div>
+        </div>
+        
+        <section class="attachment-section" id="attachmentSection">
+            <div class="section-header">
+                📎 Email Attachments
+            </div>
+            <div class="section-content">
+                <ul class="attachment-list" id="attachmentList">
+                    <!-- Attachments will be populated here -->
+                </ul>
+            </div>
+        </section>
+        
+        <section class="search-section" id="searchSection" class="hidden">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="searchInput" 
+                placeholder="Search for matter by client name or case number..."
+                autocomplete="off"
+            />
+            <div class="results-list" id="resultsList">
+                <!-- Search results will appear here -->
+            </div>
+        </section>
+        
+        <section class="folder-selection hidden" id="folderSelection">
+            <h3 style="font-family: var(--font-display); font-size: 18px; margin-bottom: 16px; color: var(--primary-navy);">Choose Destination Folder</h3>
+            <div class="folder-options">
+                <div class="folder-option" data-folder="Documents">📄 Documents</div>
+                <div class="folder-option" data-folder="Pleadings">⚖️ Pleadings</div>
+                <div class="folder-option" data-folder="Discovery">🔍 Discovery</div>
+                <div class="folder-option" data-folder="Correspondence">✉️ Correspondence</div>
+            </div>
+            <div class="custom-folder">
+                <input 
+                    type="text" 
+                    id="customFolderInput" 
+                    placeholder="Or type a custom folder name..."
+                />
+            </div>
+        </section>
+        
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+            <button class="btn btn-primary hidden" id="saveBtn">Save to Matter</button>
+        </div>
+        
+        <div class="progress-bar hidden" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+    
+    <script src="taskpane.js"></script>
+</body>
+</html>
