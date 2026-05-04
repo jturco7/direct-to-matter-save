@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+           xsi:type="MailApp">
+  <Id>60f294c5-c78a-4e2e-8fd2-87cd853157cd</Id>
+  <Version>1.2.0.0</Version>
+  <ProviderName>John T. Turco Associates</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Direct-to-Matter Save"/>
+  <Description DefaultValue="Save email attachments directly to a Centerbase matter in SharePoint"/>
+  <IconUrl DefaultValue="https://jturco7.github.io/direct-to-matter-save/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://jturco7.github.io/direct-to-matter-save/icon-80.png"/>
+  <SupportUrl DefaultValue="https://jturco7.github.io/direct-to-matter-save/support.html"/>
+  <AppDomains>
+    <AppDomain>https://jturco7.github.io</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://jturco7.github.io/direct-to-matter-save/taskpane.html"/>
+        <RequestedHeight>450</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://jturco7.github.io/direct-to-matter-save/taskpane.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteMailbox</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.5">
+        <bt:Set Name="Mailbox"/>
+      </bt:Sets>
+    </Requirements>
+    <Hosts>
+      <Host xsi:type="MailHost">
+
+        <!-- ============================================================ -->
+        <!-- DESKTOP: Outlook on Windows, Mac, and Web                    -->
+        <!-- ============================================================ -->
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+
+          <!-- Read mode: button on opened email -->
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgReadGroup">
+                <Label resid="GroupLabel"/>
+                <Control xsi:type="Button" id="msgReadOpenPaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+
+          <!-- Compose mode: button on new/reply/forward window -->
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgComposeGroup">
+                <Label resid="GroupLabel"/>
+                <Control xsi:type="Button" id="msgComposeOpenPaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+
+        <!-- ============================================================ -->
+        <!-- MOBILE: Outlook on iOS and Android                           -->
+        <!-- ============================================================ -->
+        <MobileFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="MobileMessageReadCommandSurface">
+            <Group id="mobileMsgReadGroup">
+              <Label resid="GroupLabel"/>
+              <Control xsi:type="MobileButton" id="mobileMsgReadOpenPaneButton">
+                <Label resid="TaskpaneButton.Label"/>
+                <Icon>
+                  <bt:Image size="25" resid="Icon.25x25"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="48" resid="Icon.48x48"/>
+                </Icon>
+                <Action xsi:type="ShowTaskpane">
+                  <SourceLocation resid="Taskpane.Url"/>
+                </Action>
+              </Control>
+            </Group>
+          </ExtensionPoint>
+        </MobileFormFactor>
+
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://jturco7.github.io/direct-to-matter-save/icon-16.png"/>
+        <bt:Image id="Icon.25x25" DefaultValue="https://jturco7.github.io/direct-to-matter-save/icon-25.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://jturco7.github.io/direct-to-matter-save/icon-32.png"/>
+        <bt:Image id="Icon.48x48" DefaultValue="https://jturco7.github.io/direct-to-matter-save/icon-48.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://jturco7.github.io/direct-to-matter-save/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Commands.Url" DefaultValue="https://jturco7.github.io/direct-to-matter-save/taskpane.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://jturco7.github.io/direct-to-matter-save/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GroupLabel" DefaultValue="Turco Law"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Save to Matter"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Save email attachments directly to a Centerbase matter in SharePoint"/>
+      </bt:LongStrings>
+    </Resources>
+
+    <!-- ================================================================ -->
+    <!-- SSO PLACEHOLDER (commented out - enable when Azure AD app is set) -->
+    <!-- ================================================================ -->
+    <!-- To enable SSO:                                                    -->
+    <!--   1. Register an Azure AD app for the add-in                      -->
+    <!--   2. Expose an API with scope 'access_as_user'                    -->
+    <!--   3. Authorize Office client IDs (d3590ed6-52b3-4102-aeff-aad...) -->
+    <!--   4. Wire Office.auth.getAccessToken() in taskpane.js             -->
+    <!--   5. Implement on-behalf-of flow on a backend (or use sp-bridge)  -->
+    <!--                                                                   -->
+    <!-- <WebApplicationInfo>                                              -->
+    <!--   <Id>YOUR-AZURE-AD-APP-CLIENT-ID-HERE</Id>                       -->
+    <!--   <Resource>api://jturco7.github.io/YOUR-AZURE-AD-APP-CLIENT-ID</Resource> -->
+    <!--   <Scopes>                                                        -->
+    <!--     <Scope>User.Read</Scope>                                      -->
+    <!--     <Scope>Files.ReadWrite.All</Scope>                            -->
+    <!--     <Scope>Sites.ReadWrite.All</Scope>                            -->
+    <!--     <Scope>profile</Scope>                                        -->
+    <!--     <Scope>openid</Scope>                                         -->
+    <!--   </Scopes>                                                       -->
+    <!-- </WebApplicationInfo>                                             -->
+
+  </VersionOverrides>
+</OfficeApp>
