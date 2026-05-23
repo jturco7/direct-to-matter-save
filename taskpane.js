@@ -6,7 +6,7 @@
 
     // Configuration - Update these URLs to match your deployment
     const CONFIG = {
-        API_BASE: 'https://being-mats-assure-fort.trycloudflare.com',  // sp-bridge via Cloudflare Tunnel
+        API_BASE: 'https://workplace-continuity-nelson-manner.trycloudflare.com',  // sp-bridge via Cloudflare Tunnel
         API_KEY: '1a3f307b2ba7f56a80fc9c1898644c76440b0cb3b69c5fa1cf70fe72c40a2828',  // shared secret for matter_search.py
         GRAPH_BASE: 'https://graph.microsoft.com/v1.0',
         CLIENT_ID: '6b7c22e5-e8bc-416c-97c8-7f1b0cba335a',
