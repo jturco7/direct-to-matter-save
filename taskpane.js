@@ -203,9 +203,9 @@
         }
     }
 
-    function renderSearchResults() {
+   function renderSearchResults() {
         const html = state.searchResults.map(matter => `
-            <div class="result-item" data-matter="${escapeHtml(JSON.stringify(matter))}">
+            <div class="result-item" data-matter-number="${escapeHtml(matter.matter_number)}">
                 <div class="matter-number">${escapeHtml(matter.matter_number)}</div>
                 <div class="matter-name">${escapeHtml(matter.display_name.split(' - ').slice(1).join(' - '))}</div>
             </div>
@@ -215,10 +215,15 @@
 
         // Bind click events
         document.querySelectorAll('.result-item').forEach(item => {
-            item.addEventListener('click', () => selectMatter(JSON.parse(item.dataset.matter)));
+            item.addEventListener('click', () => {
+                const matterNumber = item.dataset.matterNumber;
+                const matter = state.searchResults.find(m => m.matter_number === matterNumber);
+                if (matter) selectMatter(matter);
+            });
         });
     }
-
+    
+ 
     async function selectMatter(matter) {
         try {
             // Highlight selected matter
