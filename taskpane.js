@@ -6,7 +6,8 @@
 
     // Configuration - Update these URLs to match your deployment
     const CONFIG = {
-        API_BASE: 'http://10.1.10.168:5000',  // sp-bridge API endpoint
+        API_BASE: 'https://being-mats-assure-fort.trycloudflare.com',  // sp-bridge via Cloudflare Tunnel
+        API_KEY: '1a3f307b2ba7f56a80fc9c1898644c76440b0cb3b69c5fa1cf70fe72c40a2828',  // shared secret for matter_search.py
         GRAPH_BASE: 'https://graph.microsoft.com/v1.0',
         CLIENT_ID: '6b7c22e5-e8bc-416c-97c8-7f1b0cba335a',
         TENANT_ID: '612c697b-b95c-4ad9-a9df-58d52ed8eff1',
@@ -176,7 +177,9 @@
         try {
             updateStatus('Searching matters...', 'pending');
             
-            const response = await fetch(`${CONFIG.API_BASE}/search?q=${encodeURIComponent(query)}`);
+            const response = await fetch(`${CONFIG.API_BASE}/search?q=${encodeURIComponent(query)}`, {
+                headers: { 'X-API-Key': CONFIG.API_KEY }
+            });
             
             if (!response.ok) {
                 throw new Error(`Search failed: ${response.status}`);
@@ -227,7 +230,9 @@
             // Get detailed matter information
             updateStatus('Loading matter details...', 'pending');
             
-            const response = await fetch(`${CONFIG.API_BASE}/matter/${matter.matter_number}`);
+            const response = await fetch(`${CONFIG.API_BASE}/matter/${matter.matter_number}`, {
+                headers: { 'X-API-Key': CONFIG.API_KEY }
+            });
             
             if (!response.ok) {
                 throw new Error(`Failed to load matter details: ${response.status}`);
